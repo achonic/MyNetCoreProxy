@@ -1,0 +1,35 @@
+# CMake build directories
+build/
+bin/
+lib/
+out/
+.cmake/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+compile_commands.json
+cmake_install.cmake
+
+# VSCode settings
+.vscode/
+.cache/
+.VSCodeCounter/
+
+# Compiled object files
+*.o
+*.a
+*.so
+*.dylib
+
+# Executables
+*.out
+*.exe
+echo_server
+static_proxy_server
+
+# OS generated files
+.DS_Store
+*.swp
+*~
+atomic_test.cpp
+bench
