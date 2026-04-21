@@ -18,9 +18,7 @@ public:
   ~Acceptor();
 
   void setNewConnectCallback(NewConnectionCallback cb) {
-    //       LOG_DEBUG << "[Acceptor] setNewConnectCallback called" <<
-    //       std::endl;
-    new_conn_callback_ = std::move(cb);
+    new_connection_callback_ = std::move(cb);
   }
   void listen();
 
@@ -29,9 +27,9 @@ private:
 
   EventLoop *loop_;
   InetAddress listen_addr_;
-  int accept_socketFd_; // 用于 accept 的 socket fd
-  std::unique_ptr<Channel> accept_channel_;
-  NewConnectionCallback new_conn_callback_;
+  int listen_socketFd_; // 用于监听连接请求的 socket fd
+  std::unique_ptr<Channel> listen_channel_;
+  NewConnectionCallback new_connection_callback_;
 
   bool listening_;
 };

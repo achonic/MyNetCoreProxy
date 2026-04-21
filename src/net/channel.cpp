@@ -4,15 +4,18 @@
 #include <iostream>
 #include <unistd.h>
 
+/*
+    Channel是通道，存放IO读写的处理的回调函数。
+    EventLoop负责调度IO多路复用的事件，Channel负责执行IO读写。
+    Channel的更新和删除都必须在EventLoop中进行。
+    Channel的创建都在EventLoop中。
+
+*/
+
 namespace net {
 
 Channel::Channel(EventLoop *loop, int fd)
-    : loop_(loop), 
-      fd_(fd), 
-      events_(0), 
-      revents_(0), 
-      index_(-1) {
-}
+    : loop_(loop), fd_(fd), events_(0), revents_(0), index_(-1) {}
 
 Channel::~Channel() {
   // fd的close由外部管理
@@ -56,35 +59,30 @@ void Channel::disableAll() {
 
 void Channel::handleEvent() {
   if (revents_ & (EPOLLERR | EPOLLHUP)) {
-    if (error_callback_) error_callback_();
+    if (error_callback_)
+      error_callback_();
   }
   if (revents_ & EPOLLIN) {
-    if (read_callback_) read_callback_();
+    if (read_callback_)
+      read_callback_();
   }
   if (revents_ & EPOLLOUT) {
-    if (write_callback_) write_callback_();
+    if (write_callback_)
+      write_callback_();
   }
 }
 
-void Channel::update() { 
-  loop_->updateChannel(this); 
-}
+void Channel::update() { loop_->updateChannel(this); }
 
 void Channel::remove() {
   assert(isNoneEvent());
   loop_->removeChannel(this);
 }
 
-bool Channel::isNoneEvent() const { 
-  return events_ == 0; 
-}
+bool Channel::isNoneEvent() const { return events_ == 0; }
 
-bool Channel::isReading() const { 
-  return events_ & EPOLLIN; 
-}
+bool Channel::isReading() const { return events_ & EPOLLIN; }
 
-bool Channel::isWriting() const { 
-  return events_ & EPOLLOUT; 
-}
+bool Channel::isWriting() const { return events_ & EPOLLOUT; }
 
 } // namespace net

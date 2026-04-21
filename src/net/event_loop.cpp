@@ -57,6 +57,7 @@ void EventLoop::runInLoop(std::function<void()> cb) {
 }
 void EventLoop::doPendingFunctors() {
   std::deque<std::function<void()>> functors;
+  // 正在处理任务队列，让新投递任务不要唤醒eventloop
   calling_pending_functors_ = true;
   {
     std::lock_guard<std::mutex> lock(mutex_);
@@ -90,8 +91,8 @@ void EventLoop::loop() {
                                   static_cast<int>(events_.size()), 10000);
     if (num_events > 0) {
       for (int i = 0; i < num_events; i++) {
-        // Channel封装 fd 管理读写回调
-        // 通过Channel调用 epoll_ctl（系统调用）
+        // 有 IO 事件了，需要执行 IO 事件
+        // IO 事件的执行由Channel实现
         Channel *channel = static_cast<Channel *>(events_[i].data.ptr);
         channel->setRevents(events_[i].events);
         channel->handleEvent();
@@ -158,7 +159,7 @@ void EventLoop::updateChannel(Channel *channel) {
 }
 void EventLoop::removeChannel(Channel *channel) {
   assert(channel != nullptr);
-  assert(channel->ownerLoop() == this);  // 确保 Channel 属于当前 EventLoop
+  assert(channel->ownerLoop() == this); // 确保 Channel 属于当前 EventLoop
   assert(!looping_ || isInLoopThread()); // 确保在正确的线程中调用
 
   if (looping_) { // 如果 EventLoop 正在运行（looping_ 为 true）

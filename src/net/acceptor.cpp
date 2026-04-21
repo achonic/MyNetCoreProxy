@@ -49,34 +49,34 @@ namespace net {
 Acceptor::Acceptor(EventLoop *loop, const InetAddress &listen_addr)
     : loop_(loop), listen_addr_(listen_addr), listening_(false) {
   // 设置流式，非阻塞TCP套接字
-  accept_socketFd_ =
+  listen_socketFd_ =
       ::socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, IPPROTO_TCP);
-  accept_channel_ = std::make_unique<Channel>(loop_, accept_socketFd_);
-  if (accept_socketFd_ < 0) {
+  listen_channel_ = std::make_unique<Channel>(loop_, listen_socketFd_);
+  if (listen_socketFd_ < 0) {
     LOG_DEBUG << "Acceptor::Acceptor() socket failed." << std::endl;
     return;
   }
   int opt = 1;
 
   // 允许端口在关闭后被快速重用
-  if (::setsockopt(accept_socketFd_, SOL_SOCKET, SO_REUSEADDR, &opt,
+  if (::setsockopt(listen_socketFd_, SOL_SOCKET, SO_REUSEADDR, &opt,
                    sizeof(opt)) < 0) {
     // 处理错误
     LOG_DEBUG << "Acceptor::Acceptor() setsockopt SO_REUSEADDR failed."
               << std::endl;
   }
 
-  accept_channel_->setReadCallback([this]() { handleRead(); });
+  listen_channel_->setReadCallback([this]() { handleRead(); });
 }
 Acceptor::~Acceptor() {
-  accept_channel_->remove(); // 从 EventLoop 移除
-  if (accept_socketFd_ >= 0) {
-    ::close(accept_socketFd_); // 关闭 listen fd
+  listen_channel_->remove(); // 从 EventLoop 移除
+  if (listen_socketFd_ >= 0) {
+    ::close(listen_socketFd_); // 关闭 listen fd
   }
 }
 
 void Acceptor::listen() {
-  if (::bind(accept_socketFd_,
+  if (::bind(listen_socketFd_,
              reinterpret_cast<const sockaddr *>(listen_addr_.getSockAddrInet()),
              sizeof(sockaddr_in)) < 0) {
     LOG_DEBUG << "Acceptor::listen() bind failed: " << strerror(errno)
@@ -84,14 +84,14 @@ void Acceptor::listen() {
     return;
   }
 
-  if (::listen(accept_socketFd_, SOMAXCONN) <
+  if (::listen(listen_socketFd_, SOMAXCONN) <
       0) { // SOMAXCONN 是系统定义的最大监听队列长度
     LOG_DEBUG << "Acceptor::listen() listen failed: " << strerror(errno)
               << std::endl;
     return;
   }
 
-  accept_channel_->enableReading(); // 开始监听 EPOLLIN 事件
+  listen_channel_->enableReading(); // 开始监听 EPOLLIN 事件
   listening_ = true;
   LOG_DEBUG << "Acceptor listening on " << listen_addr_.toIpPort() << std::endl;
 }
@@ -104,15 +104,15 @@ void Acceptor::handleRead() {
   InetAddress peer_addr;
   socklen_t len = sizeof(sockaddr_in);
   int conn_fd =
-      ::accept4(accept_socketFd_,
+      ::accept4(listen_socketFd_,
                 reinterpret_cast<sockaddr *>(
                     const_cast<sockaddr_in *>(peer_addr.getSockAddrInet())),
                 &len, SOCK_NONBLOCK | SOCK_CLOEXEC);
   if (conn_fd >= 0) {
-    // new_conn_callback_存放了回调函数，该回调由Server设置
+    // new_connection_callback_存放了回调函数，该回调由Server设置
     // 回调的内容是 Server的 newConnection(sockfd, peerAddr)
-    if (new_conn_callback_) {
-      new_conn_callback_(conn_fd, peer_addr);
+    if (new_connection_callback_) {
+      new_connection_callback_(conn_fd, peer_addr);
     }
     // 没有处理，关闭
     else {

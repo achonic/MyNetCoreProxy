@@ -1,2 +1,12 @@
+CompilationDatabase: build
+CompileFlags:
+  Add: [-std=c++17, -Wall]
 Diagnostics:
-  UnusedIncludes: None
+  UnusedIncludes: Strict
+  CheckOptions:
+    bugprone-*: true
+    modernize-*: true
+    performance-*: true
+    readability-*: true
+Index:
+  Background: Build
