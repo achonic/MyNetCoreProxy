@@ -28,6 +28,7 @@ private:
   EventLoop *loop_;
   InetAddress listen_addr_;
   int listen_socketFd_; // 用于监听连接请求的 socket fd
+  int idle_fd_;         // 空闲占位 fd，用于处理 EMFILE
   std::unique_ptr<Channel> listen_channel_;
   NewConnectionCallback new_connection_callback_;
 

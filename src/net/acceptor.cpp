@@ -47,7 +47,8 @@
 namespace net {
 
 Acceptor::Acceptor(EventLoop *loop, const InetAddress &listen_addr)
-    : loop_(loop), listen_addr_(listen_addr), listening_(false) {
+    : loop_(loop), listen_addr_(listen_addr), listening_(false),
+      idle_fd_(::open("/dev/null", O_RDONLY | O_CLOEXEC)) {
   // 设置流式，非阻塞TCP套接字
   listen_socketFd_ =
       ::socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, IPPROTO_TCP);
@@ -72,6 +73,9 @@ Acceptor::~Acceptor() {
   listen_channel_->remove(); // 从 EventLoop 移除
   if (listen_socketFd_ >= 0) {
     ::close(listen_socketFd_); // 关闭 listen fd
+  }
+  if (idle_fd_ >= 0) {
+    ::close(idle_fd_);
   }
 }
 
@@ -101,27 +105,42 @@ void Acceptor::handleRead() {
   // 有客户端请求连接，这时候会再产生一个socket_fd,
   // 这个socket_fd用conn_fd存起来分发给subReactor
   // 之后就和Acceptor没有关系了，所有和这个客户端的收发数据都在分发的subReactor里
-  InetAddress peer_addr;
-  socklen_t len = sizeof(sockaddr_in);
-  int conn_fd =
-      ::accept4(listen_socketFd_,
-                reinterpret_cast<sockaddr *>(
-                    const_cast<sockaddr_in *>(peer_addr.getSockAddrInet())),
-                &len, SOCK_NONBLOCK | SOCK_CLOEXEC);
-  if (conn_fd >= 0) {
-    // new_connection_callback_存放了回调函数，该回调由Server设置
-    // 回调的内容是 Server的 newConnection(sockfd, peerAddr)
-    if (new_connection_callback_) {
-      new_connection_callback_(conn_fd, peer_addr);
+  while (true) {
+    InetAddress peer_addr;
+    socklen_t len = sizeof(sockaddr_in);
+    int conn_fd =
+        ::accept4(listen_socketFd_,
+                  reinterpret_cast<sockaddr *>(
+                      const_cast<sockaddr_in *>(peer_addr.getSockAddrInet())),
+                  &len, SOCK_NONBLOCK | SOCK_CLOEXEC);
+    if (conn_fd >= 0) {
+      // new_connection_callback_存放了回调函数，该回调由Server设置
+      // 回调的内容是 Server的 newConnection(sockfd, peerAddr)
+      if (new_connection_callback_) {
+        new_connection_callback_(conn_fd, peer_addr);
+      }
+      // 没有处理，关闭
+      else {
+        ::close(conn_fd);
+      }
+    } else {
+      // 处理 accept 错误，如 EAGAIN, EWOULDBLOCK, EMFILE 等
+      if (errno == EAGAIN || errno == EWOULDBLOCK) {
+        break; // 没有数据可读，没有新连接了
+      } else if (errno == EMFILE || errno == ENFILE) {
+        // 防止文件描述符耗尽，idle_fd_空闲描述符，腾出位置
+        LOG_DEBUG << "Acceptor::handleRead() file descriptor exhausted."
+                  << std::endl;
+        ::close(idle_fd_);
+        idle_fd_ = ::accept(listen_socketFd_, nullptr, nullptr);
+        ::close(idle_fd_);
+        idle_fd_ = ::open("/dev/null", O_RDONLY | O_CLOEXEC);
+      } else {
+        LOG_DEBUG << "Acceptor::handleRead() accept failed: " << strerror(errno)
+                  << std::endl;
+        break;
+      }
     }
-    // 没有处理，关闭
-    else {
-      ::close(conn_fd);
-    }
-  } else {
-    // 处理 accept 错误，如 EAGAIN, EWOULDBLOCK, EMFILE 等
-    LOG_DEBUG << "Acceptor::handleRead() accept failed: " << strerror(errno)
-              << std::endl;
   }
 }
 

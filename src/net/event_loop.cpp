@@ -16,7 +16,7 @@ EventLoop::EventLoop()
     perror("epoll_create1");
     abort();
   }
-  // 创建 wakeupFd
+  // 创建 wakeupFd 用来唤醒当前线程的loop，通过调用方法wakeup()
   wakeup_fd_ = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
   if (wakeup_fd_ < 0) {
     perror("eventfd");
@@ -24,6 +24,7 @@ EventLoop::EventLoop()
   }
 
   // 创建 wakeupChannel 并注册到 epoll
+  // wakeup()往fd里写1个值，触发可读事件唤醒epoll_wait，从而唤醒当前线程的loop循环
   wakeupChannel_ = std::make_unique<Channel>(this, wakeup_fd_);
   wakeupChannel_->setReadCallback([this]() { handleWakeup(); });
   wakeupChannel_->enableReading(); // 只监听读事件
@@ -139,13 +140,13 @@ bool EventLoop::isInLoopThread() const {
 }
 
 // 用epoll_ctl,把fd注册进epoll当中，让event的ptr存储channel的地址，
-// 事件由channel->events()得到
+// 事件由channel->events() | EPOLLET 得到, 边沿触发模式
 void EventLoop::updateChannel(Channel *channel) {
   int fd = channel->fd();
 
   struct epoll_event event;
   event.data.ptr = channel;
-  event.events = channel->events();
+  event.events = channel->events() | EPOLLET;
   int op =
       EPOLL_CTL_ADD; // 添加  EPOLL相当于一个红黑树、有添加、修改、删除三个操作
   if (::epoll_ctl(epoll_fd_, op, fd, &event) < 0) {
