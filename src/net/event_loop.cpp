@@ -146,7 +146,7 @@ void EventLoop::updateChannel(Channel *channel) {
 
   struct epoll_event event;
   event.data.ptr = channel;
-  event.events = channel->events() | EPOLLET;
+  event.events = channel->events();
   int op =
       EPOLL_CTL_ADD; // 添加  EPOLL相当于一个红黑树、有添加、修改、删除三个操作
   if (::epoll_ctl(epoll_fd_, op, fd, &event) < 0) {

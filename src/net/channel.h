@@ -26,6 +26,8 @@ public:
 
   // 开启读，注册读事件到Epoll当中
   void enableReading();
+  // 关闭读
+  void disableReading();
   // 开启写，注册写事件到Epoll当中
   void enableWriting();
   // 关闭写

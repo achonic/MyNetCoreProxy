@@ -171,6 +171,36 @@ void HttpProxyHandler::setupBidirectionalRelay(
 
   // 设置后端连接的回调（后端数据 → 客户端）
   if (backend_conn_) {
+    // ---- 闭环流控（全链路背压） ----
+    // 1. 后端数据积压超过水位，让前端停读
+    backend_conn_->setHighWaterMarkCallback(
+        [frontend_conn](TcpConnection *conn) {
+          LOG_DEBUG << "[" << frontend_conn->name() << "] Backend high water mark reached. Pausing frontend reading." << std::endl;
+          frontend_conn->stopRead();
+        }, 64 * 1024 * 1024);
+
+    // 2. 后端数据发送完毕，让前端恢复读取
+    backend_conn_->setWriteCompleteCallback(
+        [frontend_conn](TcpConnection *conn) {
+          LOG_DEBUG << "[" << frontend_conn->name() << "] Backend write complete. Resuming frontend reading." << std::endl;
+          frontend_conn->startRead();
+        });
+
+    // 3. 前端数据积压超过水位，让后端停读
+    frontend_conn->setHighWaterMarkCallback(
+        [this](TcpConnection *conn) {
+          LOG_DEBUG << "[" << conn->name() << "] Frontend high water mark reached. Pausing backend reading." << std::endl;
+          if (backend_conn_) backend_conn_->stopRead();
+        }, 64 * 1024 * 1024);
+
+    // 4. 前端数据发送完毕，让后端恢复读取
+    frontend_conn->setWriteCompleteCallback(
+        [this](TcpConnection *conn) {
+          LOG_DEBUG << "[" << conn->name() << "] Frontend write complete. Resuming backend reading." << std::endl;
+          if (backend_conn_) backend_conn_->startRead();
+        });
+    // ---- 流控设置结束 ----
+
     backend_conn_->setMessageCallback(
         [this, frontend_conn](TcpConnection *backend_conn, Buffer *buffer) {
           std::string response = buffer->retrieveAllAsString();

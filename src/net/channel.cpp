@@ -42,6 +42,11 @@ void Channel::enableReading() {
   update();
 }
 
+void Channel::disableReading() {
+  events_ &= ~EPOLLIN;
+  update();
+}
+
 void Channel::enableWriting() {
   events_ |= EPOLLOUT;
   update();
