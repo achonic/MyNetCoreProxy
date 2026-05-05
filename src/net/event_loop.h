@@ -2,6 +2,8 @@
 
 #include "utils/noncopyable.h"
 #include "channel.h"
+#include "timestamp.h"
+#include "timer_id.h"
 #include <thread>
 #include <vector>
 #include <sys/epoll.h>
@@ -11,6 +13,8 @@
 #include <atomic>
 
 namespace net{
+
+class TimerQueue;
 
 class EventLoop : private utils::NonCopyable{
 public:
@@ -30,6 +34,12 @@ public:
     void updateChannel(Channel* channel);
     void removeChannel(Channel* channel);
 
+    // Timer APIs
+    TimerId runAt(Timestamp time, std::function<void()> cb);
+    TimerId runAfter(double delay, std::function<void()> cb);
+    TimerId runEvery(double interval, std::function<void()> cb);
+    void cancel(TimerId timerId);
+
 private:
 //    void handleEpollEvent();
 
@@ -41,6 +51,7 @@ private:
 
     int wakeup_fd_;
     std::unique_ptr<Channel> wakeupChannel_;
+    std::unique_ptr<TimerQueue> timerQueue_;
 
     std::thread::id thread_id_;
     std::vector<struct epoll_event> events_;

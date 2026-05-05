@@ -73,7 +73,7 @@ void Server::newConnection(int sockfd, const InetAddress &peerAddr) {
 void Server::removeConnection(const TcpConnection *conn) {
   LOG_DEBUG << "Server::removeConnection [" << conn->name()
             << "] - connection closed" << std::endl;
-
+  // C++14 广义 lambda 捕获
   loop_->runInLoop([this, connName = std::string(conn->name())]() {
     std::lock_guard<std::mutex> lock(mutex_);
     size_t n = connections_.erase(connName);

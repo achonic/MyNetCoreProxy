@@ -1,0 +1,492 @@
+==28683== Memcheck, a memory error detector
+==28683== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==28683== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==28683== Command: ./build/static_proxy_server
+==28683== Parent PID: 28681
+==28683== 
+==28683== 
+==28683== Process terminating with default action of signal 1 (SIGHUP)
+==28683==    at 0x4C39072: epoll_wait (epoll_wait.c:30)
+==28683==    by 0x1103E2: net::EventLoop::loop() (event_loop.cpp:92)
+==28683==    by 0x10D746: main (static_proxy_server.cpp:51)
+==28683== 
+==28683== HEAP SUMMARY:
+==28683==     in use at exit: 1,124,824 bytes in 8,067 blocks
+==28683==   total heap usage: 44,544 allocs, 36,477 frees, 5,486,304 bytes allocated
+==28683== 
+==28683== 16 bytes in 1 blocks are still reachable in loss record 1 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x10E64E: void std::_Function_base::_Base_manager<main::{lambda(net::TcpConnection*)#1}>::_M_create<main::{lambda(net::TcpConnection*)#1}>(std::_Any_data&, main::{lambda(net::TcpConnection*)#1}&&, std::integral_constant<bool, false>) (std_function.h:161)
+==28683==    by 0x10E2B3: void std::_Function_base::_Base_manager<main::{lambda(net::TcpConnection*)#1}>::_M_init_functor<main::{lambda(net::TcpConnection*)#1}>(std::_Any_data&, main::{lambda(net::TcpConnection*)#1}&&) (std_function.h:215)
+==28683==    by 0x10DD6E: std::function<std::unique_ptr<net::ConnectionHandler, std::default_delete<net::ConnectionHandler> > (net::TcpConnection*)>::function<main::{lambda(net::TcpConnection*)#1}, void>(main::{lambda(net::TcpConnection*)#1}&&) (std_function.h:449)
+==28683==    by 0x10D672: main (static_proxy_server.cpp:41)
+==28683== 
+==28683== 24 bytes in 1 blocks are still reachable in loss record 2 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x12A1CC: void std::_Function_base::_Base_manager<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()> >::_M_create<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()> >(std::_Any_data&, std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()>&&, std::integral_constant<bool, false>) (std_function.h:161)
+==28683==    by 0x1292BB: void std::_Function_base::_Base_manager<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()> >::_M_init_functor<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()> >(std::_Any_data&, std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()>&&) (std_function.h:215)
+==28683==    by 0x1285A2: std::function<void ()>::function<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()>, void>(std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()>&&) (std_function.h:449)
+==28683==    by 0x127621: net::TimerQueue::TimerQueue(net::EventLoop*) (timer_queue.cpp:59)
+==28683==    by 0x110D0A: std::__detail::_MakeUniq<net::TimerQueue>::__single_object std::make_unique<net::TimerQueue, net::EventLoop*>(net::EventLoop*&&) (unique_ptr.h:1070)
+==28683==    by 0x10FDE3: net::EventLoop::EventLoop() (event_loop.cpp:15)
+==28683==    by 0x10D2B3: main (static_proxy_server.cpp:18)
+==28683== 
+==28683== 32 bytes in 1 blocks are still reachable in loss record 3 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x12F3C3: std::__new_allocator<std::unique_ptr<net::EventLoopThread, std::default_delete<net::EventLoopThread> > >::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x12E4E4: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x12E4E4: std::_Vector_base<std::unique_ptr<net::EventLoopThread, std::default_delete<net::EventLoopThread> >, std::allocator<std::unique_ptr<net::EventLoopThread, std::default_delete<net::EventLoopThread> > > >::_M_allocate(unsigned long) (stl_vector.h:381)
+==28683==    by 0x12DC07: std::vector<std::unique_ptr<net::EventLoopThread, std::default_delete<net::EventLoopThread> >, std::allocator<std::unique_ptr<net::EventLoopThread, std::default_delete<net::EventLoopThread> > > >::reserve(unsigned long) (vector.tcc:79)
+==28683==    by 0x12D5E4: net::threadPool::threadPool(net::EventLoop*, int) (thread_pool.cpp:11)
+==28683==    by 0x1224C9: std::__detail::_MakeUniq<net::threadPool>::__single_object std::make_unique<net::threadPool, net::EventLoop*&, int>(net::EventLoop*&, int&&) (unique_ptr.h:1070)
+==28683==    by 0x121602: net::Server::Server(net::EventLoop*, net::InetAddress const&) (server.cpp:8)
+==28683==    by 0x10D640: main (static_proxy_server.cpp:38)
+==28683== 
+==28683== 32 bytes in 1 blocks are still reachable in loss record 4 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x12F4A9: std::__new_allocator<net::EventLoop*>::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x12E5A6: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x12E5A6: std::_Vector_base<net::EventLoop*, std::allocator<net::EventLoop*> >::_M_allocate(unsigned long) (stl_vector.h:381)
+==28683==    by 0x12DD21: std::vector<net::EventLoop*, std::allocator<net::EventLoop*> >::reserve(unsigned long) (vector.tcc:79)
+==28683==    by 0x12D600: net::threadPool::threadPool(net::EventLoop*, int) (thread_pool.cpp:12)
+==28683==    by 0x1224C9: std::__detail::_MakeUniq<net::threadPool>::__single_object std::make_unique<net::threadPool, net::EventLoop*&, int>(net::EventLoop*&, int&&) (unique_ptr.h:1070)
+==28683==    by 0x121602: net::Server::Server(net::EventLoop*, net::InetAddress const&) (server.cpp:8)
+==28683==    by 0x10D640: main (static_proxy_server.cpp:38)
+==28683== 
+==28683== 48 bytes in 1 blocks are still reachable in loss record 5 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x11794C: std::__new_allocator<std::_Rb_tree_node<net::InetAddress> >::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x1175C7: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x1175C7: std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_M_get_node() (stl_tree.h:563)
+==28683==    by 0x117373: std::_Rb_tree_node<net::InetAddress>* std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_M_create_node<net::InetAddress const&>(net::InetAddress const&) (stl_tree.h:613)
+==28683==    by 0x116DD6: std::_Rb_tree_node<net::InetAddress>* std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_Alloc_node::operator()<net::InetAddress const&>(net::InetAddress const&) const (stl_tree.h:531)
+==28683==    by 0x116213: std::_Rb_tree_iterator<net::InetAddress> std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_M_insert_<net::InetAddress const&, std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_Alloc_node>(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, net::InetAddress const&, std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_Alloc_node&) (stl_tree.h:1831)
+==28683==    by 0x1154F3: std::pair<std::_Rb_tree_iterator<net::InetAddress>, bool> std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_M_insert_unique<net::InetAddress const&>(net::InetAddress const&) (stl_tree.h:2176)
+==28683==    by 0x114E71: std::set<net::InetAddress, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::insert(net::InetAddress const&) (stl_set.h:514)
+==28683==    by 0x1146D1: app::LoadBalancer::addBackend(net::InetAddress const&) (load_balancer.cpp:11)
+==28683==    by 0x10D334: main (static_proxy_server.cpp:22)
+==28683== 
+==28683== 48 bytes in 1 blocks are still reachable in loss record 6 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x11794C: std::__new_allocator<std::_Rb_tree_node<net::InetAddress> >::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x1175C7: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x1175C7: std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_M_get_node() (stl_tree.h:563)
+==28683==    by 0x117373: std::_Rb_tree_node<net::InetAddress>* std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_M_create_node<net::InetAddress const&>(net::InetAddress const&) (stl_tree.h:613)
+==28683==    by 0x116DD6: std::_Rb_tree_node<net::InetAddress>* std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_Alloc_node::operator()<net::InetAddress const&>(net::InetAddress const&) const (stl_tree.h:531)
+==28683==    by 0x116213: std::_Rb_tree_iterator<net::InetAddress> std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_M_insert_<net::InetAddress const&, std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_Alloc_node>(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, net::InetAddress const&, std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_Alloc_node&) (stl_tree.h:1831)
+==28683==    by 0x1154F3: std::pair<std::_Rb_tree_iterator<net::InetAddress>, bool> std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_M_insert_unique<net::InetAddress const&>(net::InetAddress const&) (stl_tree.h:2176)
+==28683==    by 0x114E71: std::set<net::InetAddress, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::insert(net::InetAddress const&) (stl_set.h:514)
+==28683==    by 0x1146D1: app::LoadBalancer::addBackend(net::InetAddress const&) (load_balancer.cpp:11)
+==28683==    by 0x10D3C5: main (static_proxy_server.cpp:23)
+==28683== 
+==28683== 48 bytes in 1 blocks are still reachable in loss record 7 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x11794C: std::__new_allocator<std::_Rb_tree_node<net::InetAddress> >::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x1175C7: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x1175C7: std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_M_get_node() (stl_tree.h:563)
+==28683==    by 0x117373: std::_Rb_tree_node<net::InetAddress>* std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_M_create_node<net::InetAddress const&>(net::InetAddress const&) (stl_tree.h:613)
+==28683==    by 0x116DD6: std::_Rb_tree_node<net::InetAddress>* std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_Alloc_node::operator()<net::InetAddress const&>(net::InetAddress const&) const (stl_tree.h:531)
+==28683==    by 0x116213: std::_Rb_tree_iterator<net::InetAddress> std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_M_insert_<net::InetAddress const&, std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_Alloc_node>(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, net::InetAddress const&, std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_Alloc_node&) (stl_tree.h:1831)
+==28683==    by 0x1154F3: std::pair<std::_Rb_tree_iterator<net::InetAddress>, bool> std::_Rb_tree<net::InetAddress, net::InetAddress, std::_Identity<net::InetAddress>, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::_M_insert_unique<net::InetAddress const&>(net::InetAddress const&) (stl_tree.h:2176)
+==28683==    by 0x114E71: std::set<net::InetAddress, std::less<net::InetAddress>, std::allocator<net::InetAddress> >::insert(net::InetAddress const&) (stl_set.h:514)
+==28683==    by 0x1146D1: app::LoadBalancer::addBackend(net::InetAddress const&) (load_balancer.cpp:11)
+==28683==    by 0x10D456: main (static_proxy_server.cpp:24)
+==28683== 
+==28683== 48 bytes in 1 blocks are still reachable in loss record 8 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x12CFD8: std::__new_allocator<std::_Rb_tree_node<std::pair<net::Timestamp, net::Timer*> > >::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x12C93D: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x12C93D: std::_Rb_tree<std::pair<net::Timestamp, net::Timer*>, std::pair<net::Timestamp, net::Timer*>, std::_Identity<std::pair<net::Timestamp, net::Timer*> >, std::less<std::pair<net::Timestamp, net::Timer*> >, std::allocator<std::pair<net::Timestamp, net::Timer*> > >::_M_get_node() (stl_tree.h:563)
+==28683==    by 0x12C631: std::_Rb_tree_node<std::pair<net::Timestamp, net::Timer*> >* std::_Rb_tree<std::pair<net::Timestamp, net::Timer*>, std::pair<net::Timestamp, net::Timer*>, std::_Identity<std::pair<net::Timestamp, net::Timer*> >, std::less<std::pair<net::Timestamp, net::Timer*> >, std::allocator<std::pair<net::Timestamp, net::Timer*> > >::_M_create_node<std::pair<net::Timestamp, net::Timer*> >(std::pair<net::Timestamp, net::Timer*>&&) (stl_tree.h:613)
+==28683==    by 0x12C25C: std::_Rb_tree_node<std::pair<net::Timestamp, net::Timer*> >* std::_Rb_tree<std::pair<net::Timestamp, net::Timer*>, std::pair<net::Timestamp, net::Timer*>, std::_Identity<std::pair<net::Timestamp, net::Timer*> >, std::less<std::pair<net::Timestamp, net::Timer*> >, std::allocator<std::pair<net::Timestamp, net::Timer*> > >::_Alloc_node::operator()<std::pair<net::Timestamp, net::Timer*> >(std::pair<net::Timestamp, net::Timer*>&&) const (stl_tree.h:531)
+==28683==    by 0x12B58B: std::_Rb_tree_iterator<std::pair<net::Timestamp, net::Timer*> > std::_Rb_tree<std::pair<net::Timestamp, net::Timer*>, std::pair<net::Timestamp, net::Timer*>, std::_Identity<std::pair<net::Timestamp, net::Timer*> >, std::less<std::pair<net::Timestamp, net::Timer*> >, std::allocator<std::pair<net::Timestamp, net::Timer*> > >::_M_insert_<std::pair<net::Timestamp, net::Timer*>, std::_Rb_tree<std::pair<net::Timestamp, net::Timer*>, std::pair<net::Timestamp, net::Timer*>, std::_Identity<std::pair<net::Timestamp, net::Timer*> >, std::less<std::pair<net::Timestamp, net::Timer*> >, std::allocator<std::pair<net::Timestamp, net::Timer*> > >::_Alloc_node>(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::pair<net::Timestamp, net::Timer*>&&, std::_Rb_tree<std::pair<net::Timestamp, net::Timer*>, std::pair<net::Timestamp, net::Timer*>, std::_Identity<std::pair<net::Timestamp, net::Timer*> >, std::less<std::pair<net::Timestamp, net::Timer*> >, std::allocator<std::pair<net::Timestamp, net::Timer*> > >::_Alloc_node&) (stl_tree.h:1831)
+==28683==    by 0x129E4F: std::pair<std::_Rb_tree_iterator<std::pair<net::Timestamp, net::Timer*> >, bool> std::_Rb_tree<std::pair<net::Timestamp, net::Timer*>, std::pair<net::Timestamp, net::Timer*>, std::_Identity<std::pair<net::Timestamp, net::Timer*> >, std::less<std::pair<net::Timestamp, net::Timer*> >, std::allocator<std::pair<net::Timestamp, net::Timer*> > >::_M_insert_unique<std::pair<net::Timestamp, net::Timer*> >(std::pair<net::Timestamp, net::Timer*>&&) (stl_tree.h:2176)
+==28683==    by 0x128FC2: std::set<std::pair<net::Timestamp, net::Timer*>, std::less<std::pair<net::Timestamp, net::Timer*> >, std::allocator<std::pair<net::Timestamp, net::Timer*> > >::insert(std::pair<net::Timestamp, net::Timer*>&&) (stl_set.h:523)
+==28683==    by 0x12839D: net::TimerQueue::insert(net::Timer*) (timer_queue.cpp:164)
+==28683==    by 0x1281D9: net::TimerQueue::reset(std::vector<std::pair<net::Timestamp, net::Timer*>, std::allocator<std::pair<net::Timestamp, net::Timer*> > > const&, net::Timestamp) (timer_queue.cpp:142)
+==28683==    by 0x127DDE: net::TimerQueue::handleRead() (timer_queue.cpp:116)
+==28683==    by 0x12CCB8: void std::__invoke_impl<void, void (net::TimerQueue::*&)(), net::TimerQueue*&>(std::__invoke_memfun_deref, void (net::TimerQueue::*&)(), net::TimerQueue*&) (invoke.h:74)
+==28683== 
+==28683== 48 bytes in 1 blocks are still reachable in loss record 9 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x12CD28: std::__new_allocator<std::_Rb_tree_node<std::pair<net::Timer*, long> > >::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x12C7FD: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x12C7FD: std::_Rb_tree<std::pair<net::Timer*, long>, std::pair<net::Timer*, long>, std::_Identity<std::pair<net::Timer*, long> >, std::less<std::pair<net::Timer*, long> >, std::allocator<std::pair<net::Timer*, long> > >::_M_get_node() (stl_tree.h:563)
+==28683==    by 0x12C679: std::_Rb_tree_node<std::pair<net::Timer*, long> >* std::_Rb_tree<std::pair<net::Timer*, long>, std::pair<net::Timer*, long>, std::_Identity<std::pair<net::Timer*, long> >, std::less<std::pair<net::Timer*, long> >, std::allocator<std::pair<net::Timer*, long> > >::_M_create_node<std::pair<net::Timer*, long> >(std::pair<net::Timer*, long>&&) (stl_tree.h:613)
+==28683==    by 0x12C2A0: std::_Rb_tree_node<std::pair<net::Timer*, long> >* std::_Rb_tree<std::pair<net::Timer*, long>, std::pair<net::Timer*, long>, std::_Identity<std::pair<net::Timer*, long> >, std::less<std::pair<net::Timer*, long> >, std::allocator<std::pair<net::Timer*, long> > >::_Alloc_node::operator()<std::pair<net::Timer*, long> >(std::pair<net::Timer*, long>&&) const (stl_tree.h:531)
+==28683==    by 0x12B72B: std::_Rb_tree_iterator<std::pair<net::Timer*, long> > std::_Rb_tree<std::pair<net::Timer*, long>, std::pair<net::Timer*, long>, std::_Identity<std::pair<net::Timer*, long> >, std::less<std::pair<net::Timer*, long> >, std::allocator<std::pair<net::Timer*, long> > >::_M_insert_<std::pair<net::Timer*, long>, std::_Rb_tree<std::pair<net::Timer*, long>, std::pair<net::Timer*, long>, std::_Identity<std::pair<net::Timer*, long> >, std::less<std::pair<net::Timer*, long> >, std::allocator<std::pair<net::Timer*, long> > >::_Alloc_node>(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::pair<net::Timer*, long>&&, std::_Rb_tree<std::pair<net::Timer*, long>, std::pair<net::Timer*, long>, std::_Identity<std::pair<net::Timer*, long> >, std::less<std::pair<net::Timer*, long> >, std::allocator<std::pair<net::Timer*, long> > >::_Alloc_node&) (stl_tree.h:1831)
+==28683==    by 0x129FB3: std::pair<std::_Rb_tree_iterator<std::pair<net::Timer*, long> >, bool> std::_Rb_tree<std::pair<net::Timer*, long>, std::pair<net::Timer*, long>, std::_Identity<std::pair<net::Timer*, long> >, std::less<std::pair<net::Timer*, long> >, std::allocator<std::pair<net::Timer*, long> > >::_M_insert_unique<std::pair<net::Timer*, long> >(std::pair<net::Timer*, long>&&) (stl_tree.h:2176)
+==28683==    by 0x129086: std::set<std::pair<net::Timer*, long>, std::less<std::pair<net::Timer*, long> >, std::allocator<std::pair<net::Timer*, long> > >::insert(std::pair<net::Timer*, long>&&) (stl_set.h:523)
+==28683==    by 0x1283DE: net::TimerQueue::insert(net::Timer*) (timer_queue.cpp:165)
+==28683==    by 0x1281D9: net::TimerQueue::reset(std::vector<std::pair<net::Timestamp, net::Timer*>, std::allocator<std::pair<net::Timestamp, net::Timer*> > > const&, net::Timestamp) (timer_queue.cpp:142)
+==28683==    by 0x127DDE: net::TimerQueue::handleRead() (timer_queue.cpp:116)
+==28683==    by 0x12CCB8: void std::__invoke_impl<void, void (net::TimerQueue::*&)(), net::TimerQueue*&>(std::__invoke_memfun_deref, void (net::TimerQueue::*&)(), net::TimerQueue*&) (invoke.h:74)
+==28683== 
+==28683== 64 bytes in 1 blocks are still reachable in loss record 10 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x1278A2: net::TimerQueue::addTimer(std::function<void ()>, net::Timestamp, double) (timer_queue.cpp:74)
+==28683==    by 0x110B3A: net::EventLoop::runEvery(double, std::function<void ()>) (event_loop.cpp:197)
+==28683==    by 0x11D314: app::HealthChecker::start(double) (health_checker.cpp:14)
+==28683==    by 0x10D4D8: main (static_proxy_server.cpp:28)
+==28683== 
+==28683== 64 bytes in 1 blocks are still reachable in loss record 11 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x1131FD: std::__new_allocator<std::function<void ()>*>::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x1123AA: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x1123AA: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_allocate_map(unsigned long) (stl_deque.h:597)
+==28683==    by 0x11198D: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_initialize_map(unsigned long) (stl_deque.h:646)
+==28683==    by 0x110F97: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_Deque_base() (stl_deque.h:460)
+==28683==    by 0x10FCC7: std::deque<std::function<void ()>, std::allocator<std::function<void ()> > >::deque() (stl_deque.h:855)
+==28683==    by 0x1101A3: net::EventLoop::doPendingFunctors() (event_loop.cpp:61)
+==28683==    by 0x1103A8: net::EventLoop::loop() (event_loop.cpp:88)
+==28683==    by 0x10D746: main (static_proxy_server.cpp:51)
+==28683== 
+==28683== 64 bytes in 1 blocks are possibly lost in loss record 12 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x11E4AB: void std::_Function_base::_Base_manager<app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}>::_M_create<app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}>(std::_Any_data&, app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}&&, std::integral_constant<bool, false>) (std_function.h:161)
+==28683==    by 0x11DFD2: void std::_Function_base::_Base_manager<app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}>::_M_init_functor<app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}>(std::_Any_data&, app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}&&) (std_function.h:215)
+==28683==    by 0x11DCD8: std::function<void ()>::function<app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}, void>(app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}&&) (std_function.h:449)
+==28683==    by 0x11D95C: app::HealthChecker::probe(net::InetAddress const&) (health_checker.cpp:53)
+==28683==    by 0x11D3FE: app::HealthChecker::checkBackends() (health_checker.cpp:22)
+==28683==    by 0x11D2B2: app::HealthChecker::start(double)::{lambda()#1}::operator()() const (health_checker.cpp:15)
+==28683==    by 0x11E631: void std::__invoke_impl<void, app::HealthChecker::start(double)::{lambda()#1}&>(std::__invoke_other, app::HealthChecker::start(double)::{lambda()#1}&) (invoke.h:61)
+==28683==    by 0x11E10B: std::enable_if<is_invocable_r_v<void, app::HealthChecker::start(double)::{lambda()#1}&>, void>::type std::__invoke_r<void, app::HealthChecker::start(double)::{lambda()#1}&>(app::HealthChecker::start(double)::{lambda()#1}&) (invoke.h:111)
+==28683==    by 0x11DD8F: std::_Function_handler<void (), app::HealthChecker::start(double)::{lambda()#1}>::_M_invoke(std::_Any_data const&) (std_function.h:290)
+==28683==    by 0x111247: std::function<void ()>::operator()() const (std_function.h:591)
+==28683==    by 0x127107: net::Timer::run() const (timer.h:21)
+==28683== 
+==28683== 80 bytes in 1 blocks are still reachable in loss record 13 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x122393: std::__detail::_MakeUniq<net::Acceptor>::__single_object std::make_unique<net::Acceptor, net::EventLoop*&, net::InetAddress const&>(net::EventLoop*&, net::InetAddress const&) (unique_ptr.h:1070)
+==28683==    by 0x1215C9: net::Server::Server(net::EventLoop*, net::InetAddress const&) (server.cpp:7)
+==28683==    by 0x10D640: main (static_proxy_server.cpp:38)
+==28683== 
+==28683== 96 bytes in 4 blocks are still reachable in loss record 14 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x12A1CC: void std::_Function_base::_Base_manager<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()> >::_M_create<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()> >(std::_Any_data&, std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()>&&, std::integral_constant<bool, false>) (std_function.h:161)
+==28683==    by 0x1292BB: void std::_Function_base::_Base_manager<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()> >::_M_init_functor<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()> >(std::_Any_data&, std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()>&&) (std_function.h:215)
+==28683==    by 0x1285A2: std::function<void ()>::function<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()>, void>(std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()>&&) (std_function.h:449)
+==28683==    by 0x127621: net::TimerQueue::TimerQueue(net::EventLoop*) (timer_queue.cpp:59)
+==28683==    by 0x110D0A: std::__detail::_MakeUniq<net::TimerQueue>::__single_object std::make_unique<net::TimerQueue, net::EventLoop*>(net::EventLoop*&&) (unique_ptr.h:1070)
+==28683==    by 0x10FDE3: net::EventLoop::EventLoop() (event_loop.cpp:15)
+==28683==    by 0x12F97B: net::EventLoopThread::EventLoopThread() (event_loop_thread.cpp:5)
+==28683==    by 0x12E121: std::__detail::_MakeUniq<net::EventLoopThread>::__single_object std::make_unique<net::EventLoopThread>() (unique_ptr.h:1070)
+==28683==    by 0x12D858: net::threadPool::start() (thread_pool.cpp:38)
+==28683==    by 0x1218BF: net::Server::start() (server.cpp:26)
+==28683==    by 0x10D70C: main (static_proxy_server.cpp:47)
+==28683== 
+==28683== 96 bytes in 4 blocks are still reachable in loss record 15 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x12A1CC: void std::_Function_base::_Base_manager<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()> >::_M_create<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()> >(std::_Any_data&, std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()>&&, std::integral_constant<bool, false>) (std_function.h:161)
+==28683==    by 0x1292BB: void std::_Function_base::_Base_manager<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()> >::_M_init_functor<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()> >(std::_Any_data&, std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()>&&) (std_function.h:215)
+==28683==    by 0x1285A2: std::function<void ()>::function<std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()>, void>(std::_Bind<void (net::TimerQueue::*(net::TimerQueue*))()>&&) (std_function.h:449)
+==28683==    by 0x127621: net::TimerQueue::TimerQueue(net::EventLoop*) (timer_queue.cpp:59)
+==28683==    by 0x110D0A: std::__detail::_MakeUniq<net::TimerQueue>::__single_object std::make_unique<net::TimerQueue, net::EventLoop*>(net::EventLoop*&&) (unique_ptr.h:1070)
+==28683==    by 0x10FDE3: net::EventLoop::EventLoop() (event_loop.cpp:15)
+==28683==    by 0x12FC24: net::EventLoopThread::threadFunc() (event_loop_thread.cpp:39)
+==28683==    by 0x1306E3: void std::__invoke_impl<void, void (net::EventLoopThread::*)(), net::EventLoopThread*>(std::__invoke_memfun_deref, void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (invoke.h:74)
+==28683==    by 0x130642: std::__invoke_result<void (net::EventLoopThread::*)(), net::EventLoopThread*>::type std::__invoke<void (net::EventLoopThread::*)(), net::EventLoopThread*>(void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (invoke.h:96)
+==28683==    by 0x1305B2: void std::thread::_Invoker<std::tuple<void (net::EventLoopThread::*)(), net::EventLoopThread*> >::_M_invoke<0ul, 1ul>(std::_Index_tuple<0ul, 1ul>) (std_thread.h:292)
+==28683==    by 0x13056B: std::thread::_Invoker<std::tuple<void (net::EventLoopThread::*)(), net::EventLoopThread*> >::operator()() (std_thread.h:299)
+==28683== 
+==28683== 112 bytes in 1 blocks are still reachable in loss record 16 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x122494: std::__detail::_MakeUniq<net::threadPool>::__single_object std::make_unique<net::threadPool, net::EventLoop*&, int>(net::EventLoop*&, int&&) (unique_ptr.h:1070)
+==28683==    by 0x121602: net::Server::Server(net::EventLoop*, net::InetAddress const&) (server.cpp:8)
+==28683==    by 0x10D640: main (static_proxy_server.cpp:38)
+==28683== 
+==28683== 128 bytes in 4 blocks are still reachable in loss record 17 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x12FD9F: std::thread::thread<void (net::EventLoopThread::*)(), net::EventLoopThread*, void>(void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (std_thread.h:164)
+==28683==    by 0x12FAC9: net::EventLoopThread::startLoop() (event_loop_thread.cpp:21)
+==28683==    by 0x12D86C: net::threadPool::start() (thread_pool.cpp:41)
+==28683==    by 0x1218BF: net::Server::start() (server.cpp:26)
+==28683==    by 0x10D70C: main (static_proxy_server.cpp:47)
+==28683== 
+==28683== 136 bytes in 1 blocks are still reachable in loss record 18 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x10F135: std::__new_allocator<std::_Sp_counted_ptr_inplace<app::LoadBalancer, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> >::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x10EBE3: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x10EBE3: std::__allocated_ptr<std::allocator<std::_Sp_counted_ptr_inplace<app::LoadBalancer, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > std::__allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<app::LoadBalancer, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > >(std::allocator<std::_Sp_counted_ptr_inplace<app::LoadBalancer, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> >&) (allocated_ptr.h:98)
+==28683==    by 0x10E894: std::__shared_count<(__gnu_cxx::_Lock_policy)2>::__shared_count<app::LoadBalancer, std::allocator<void>>(app::LoadBalancer*&, std::_Sp_alloc_shared_tag<std::allocator<void> >) (shared_ptr_base.h:969)
+==28683==    by 0x10E575: std::__shared_ptr<app::LoadBalancer, (__gnu_cxx::_Lock_policy)2>::__shared_ptr<std::allocator<void>>(std::_Sp_alloc_shared_tag<std::allocator<void> >) (shared_ptr_base.h:1712)
+==28683==    by 0x10E118: std::shared_ptr<app::LoadBalancer>::shared_ptr<std::allocator<void>>(std::_Sp_alloc_shared_tag<std::allocator<void> >) (shared_ptr.h:464)
+==28683==    by 0x10DB74: std::shared_ptr<std::enable_if<!std::is_array<app::LoadBalancer>::value, app::LoadBalancer>::type> std::make_shared<app::LoadBalancer>() (shared_ptr.h:1010)
+==28683==    by 0x10D2C2: main (static_proxy_server.cpp:21)
+==28683== 
+==28683== 152 bytes in 1 blocks are still reachable in loss record 19 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x1110D5: std::__detail::_MakeUniq<net::Channel>::__single_object std::make_unique<net::Channel, net::EventLoop*, int&>(net::EventLoop*&&, int&) (unique_ptr.h:1070)
+==28683==    by 0x10FEBD: net::EventLoop::EventLoop() (event_loop.cpp:29)
+==28683==    by 0x10D2B3: main (static_proxy_server.cpp:18)
+==28683== 
+==28683== 152 bytes in 1 blocks are still reachable in loss record 20 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x130EA3: std::__detail::_MakeUniq<net::Channel>::__single_object std::make_unique<net::Channel, net::EventLoop*&, int&>(net::EventLoop*&, int&) (unique_ptr.h:1070)
+==28683==    by 0x130821: net::Acceptor::Acceptor(net::EventLoop*, net::InetAddress const&) (acceptor.cpp:55)
+==28683==    by 0x1223CA: std::__detail::_MakeUniq<net::Acceptor>::__single_object std::make_unique<net::Acceptor, net::EventLoop*&, net::InetAddress const&>(net::EventLoop*&, net::InetAddress const&) (unique_ptr.h:1070)
+==28683==    by 0x1215C9: net::Server::Server(net::EventLoop*, net::InetAddress const&) (server.cpp:7)
+==28683==    by 0x10D640: main (static_proxy_server.cpp:38)
+==28683== 
+==28683== 168 bytes in 1 blocks are possibly lost in loss record 21 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x11EF00: std::__new_allocator<std::_Sp_counted_ptr_inplace<net::Channel, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> >::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x11EA67: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x11EA67: std::__allocated_ptr<std::allocator<std::_Sp_counted_ptr_inplace<net::Channel, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > std::__allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<net::Channel, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > >(std::allocator<std::_Sp_counted_ptr_inplace<net::Channel, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> >&) (allocated_ptr.h:98)
+==28683==    by 0x11E6E4: std::__shared_count<(__gnu_cxx::_Lock_policy)2>::__shared_count<net::Channel, std::allocator<void>, net::EventLoop*&, int&>(net::Channel*&, std::_Sp_alloc_shared_tag<std::allocator<void> >, net::EventLoop*&, int&) (shared_ptr_base.h:969)
+==28683==    by 0x11E231: std::__shared_ptr<net::Channel, (__gnu_cxx::_Lock_policy)2>::__shared_ptr<std::allocator<void>, net::EventLoop*&, int&>(std::_Sp_alloc_shared_tag<std::allocator<void> >, net::EventLoop*&, int&) (shared_ptr_base.h:1712)
+==28683==    by 0x11DE6E: std::shared_ptr<net::Channel>::shared_ptr<std::allocator<void>, net::EventLoop*&, int&>(std::_Sp_alloc_shared_tag<std::allocator<void> >, net::EventLoop*&, int&) (shared_ptr.h:464)
+==28683==    by 0x11DB8C: std::shared_ptr<std::enable_if<!std::is_array<net::Channel>::value, net::Channel>::type> std::make_shared<net::Channel, net::EventLoop*&, int&>(net::EventLoop*&, int&) (shared_ptr.h:1010)
+==28683==    by 0x11D82F: app::HealthChecker::probe(net::InetAddress const&) (health_checker.cpp:40)
+==28683==    by 0x11D3FE: app::HealthChecker::checkBackends() (health_checker.cpp:22)
+==28683==    by 0x11D2B2: app::HealthChecker::start(double)::{lambda()#1}::operator()() const (health_checker.cpp:15)
+==28683==    by 0x11E631: void std::__invoke_impl<void, app::HealthChecker::start(double)::{lambda()#1}&>(std::__invoke_other, app::HealthChecker::start(double)::{lambda()#1}&) (invoke.h:61)
+==28683==    by 0x11E10B: std::enable_if<is_invocable_r_v<void, app::HealthChecker::start(double)::{lambda()#1}&>, void>::type std::__invoke_r<void, app::HealthChecker::start(double)::{lambda()#1}&>(app::HealthChecker::start(double)::{lambda()#1}&) (invoke.h:111)
+==28683== 
+==28683== 256 bytes in 4 blocks are still reachable in loss record 22 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x1131FD: std::__new_allocator<std::function<void ()>*>::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x1123AA: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x1123AA: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_allocate_map(unsigned long) (stl_deque.h:597)
+==28683==    by 0x11198D: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_initialize_map(unsigned long) (stl_deque.h:646)
+==28683==    by 0x110F97: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_Deque_base() (stl_deque.h:460)
+==28683==    by 0x10FCC7: std::deque<std::function<void ()>, std::allocator<std::function<void ()> > >::deque() (stl_deque.h:855)
+==28683==    by 0x10FE46: net::EventLoop::EventLoop() (event_loop.cpp:15)
+==28683==    by 0x12F97B: net::EventLoopThread::EventLoopThread() (event_loop_thread.cpp:5)
+==28683==    by 0x12E121: std::__detail::_MakeUniq<net::EventLoopThread>::__single_object std::make_unique<net::EventLoopThread>() (unique_ptr.h:1070)
+==28683==    by 0x12D858: net::threadPool::start() (thread_pool.cpp:38)
+==28683==    by 0x1218BF: net::Server::start() (server.cpp:26)
+==28683==    by 0x10D70C: main (static_proxy_server.cpp:47)
+==28683== 
+==28683== 256 bytes in 4 blocks are still reachable in loss record 23 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x1131FD: std::__new_allocator<std::function<void ()>*>::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x1123AA: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x1123AA: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_allocate_map(unsigned long) (stl_deque.h:597)
+==28683==    by 0x11198D: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_initialize_map(unsigned long) (stl_deque.h:646)
+==28683==    by 0x110F97: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_Deque_base() (stl_deque.h:460)
+==28683==    by 0x10FCC7: std::deque<std::function<void ()>, std::allocator<std::function<void ()> > >::deque() (stl_deque.h:855)
+==28683==    by 0x1101A3: net::EventLoop::doPendingFunctors() (event_loop.cpp:61)
+==28683==    by 0x1103A8: net::EventLoop::loop() (event_loop.cpp:88)
+==28683==    by 0x12FC8C: net::EventLoopThread::threadFunc() (event_loop_thread.cpp:48)
+==28683==    by 0x1306E3: void std::__invoke_impl<void, void (net::EventLoopThread::*)(), net::EventLoopThread*>(std::__invoke_memfun_deref, void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (invoke.h:74)
+==28683==    by 0x130642: std::__invoke_result<void (net::EventLoopThread::*)(), net::EventLoopThread*>::type std::__invoke<void (net::EventLoopThread::*)(), net::EventLoopThread*>(void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (invoke.h:96)
+==28683==    by 0x1305B2: void std::thread::_Invoker<std::tuple<void (net::EventLoopThread::*)(), net::EventLoopThread*> >::_M_invoke<0ul, 1ul>(std::_Index_tuple<0ul, 1ul>) (std_thread.h:292)
+==28683== 
+==28683== 320 bytes in 1 blocks are still reachable in loss record 24 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x110CE5: std::__detail::_MakeUniq<net::TimerQueue>::__single_object std::make_unique<net::TimerQueue, net::EventLoop*>(net::EventLoop*&&) (unique_ptr.h:1070)
+==28683==    by 0x10FDE3: net::EventLoop::EventLoop() (event_loop.cpp:15)
+==28683==    by 0x10D2B3: main (static_proxy_server.cpp:18)
+==28683== 
+==28683== 512 bytes in 1 blocks are still reachable in loss record 25 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x1137EB: std::__new_allocator<std::function<void ()> >::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x112CF7: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x112CF7: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_allocate_node() (stl_deque.h:583)
+==28683==    by 0x11243A: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_create_nodes(std::function<void ()>**, std::function<void ()>**) (stl_deque.h:684)
+==28683==    by 0x1119E3: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_initialize_map(unsigned long) (stl_deque.h:658)
+==28683==    by 0x110F97: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_Deque_base() (stl_deque.h:460)
+==28683==    by 0x10FCC7: std::deque<std::function<void ()>, std::allocator<std::function<void ()> > >::deque() (stl_deque.h:855)
+==28683==    by 0x1101A3: net::EventLoop::doPendingFunctors() (event_loop.cpp:61)
+==28683==    by 0x1103A8: net::EventLoop::loop() (event_loop.cpp:88)
+==28683==    by 0x10D746: main (static_proxy_server.cpp:51)
+==28683== 
+==28683== 608 bytes in 4 blocks are still reachable in loss record 26 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x1110D5: std::__detail::_MakeUniq<net::Channel>::__single_object std::make_unique<net::Channel, net::EventLoop*, int&>(net::EventLoop*&&, int&) (unique_ptr.h:1070)
+==28683==    by 0x10FEBD: net::EventLoop::EventLoop() (event_loop.cpp:29)
+==28683==    by 0x12F97B: net::EventLoopThread::EventLoopThread() (event_loop_thread.cpp:5)
+==28683==    by 0x12E121: std::__detail::_MakeUniq<net::EventLoopThread>::__single_object std::make_unique<net::EventLoopThread>() (unique_ptr.h:1070)
+==28683==    by 0x12D858: net::threadPool::start() (thread_pool.cpp:38)
+==28683==    by 0x1218BF: net::Server::start() (server.cpp:26)
+==28683==    by 0x10D70C: main (static_proxy_server.cpp:47)
+==28683== 
+==28683== 608 bytes in 4 blocks are still reachable in loss record 27 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x1110D5: std::__detail::_MakeUniq<net::Channel>::__single_object std::make_unique<net::Channel, net::EventLoop*, int&>(net::EventLoop*&&, int&) (unique_ptr.h:1070)
+==28683==    by 0x10FEBD: net::EventLoop::EventLoop() (event_loop.cpp:29)
+==28683==    by 0x12FC24: net::EventLoopThread::threadFunc() (event_loop_thread.cpp:39)
+==28683==    by 0x1306E3: void std::__invoke_impl<void, void (net::EventLoopThread::*)(), net::EventLoopThread*>(std::__invoke_memfun_deref, void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (invoke.h:74)
+==28683==    by 0x130642: std::__invoke_result<void (net::EventLoopThread::*)(), net::EventLoopThread*>::type std::__invoke<void (net::EventLoopThread::*)(), net::EventLoopThread*>(void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (invoke.h:96)
+==28683==    by 0x1305B2: void std::thread::_Invoker<std::tuple<void (net::EventLoopThread::*)(), net::EventLoopThread*> >::_M_invoke<0ul, 1ul>(std::_Index_tuple<0ul, 1ul>) (std_thread.h:292)
+==28683==    by 0x13056B: std::thread::_Invoker<std::tuple<void (net::EventLoopThread::*)(), net::EventLoopThread*> >::operator()() (std_thread.h:299)
+==28683==    by 0x13054F: std::thread::_State_impl<std::thread::_Invoker<std::tuple<void (net::EventLoopThread::*)(), net::EventLoopThread*> > >::_M_run() (std_thread.h:244)
+==28683==    by 0x494FDB3: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==28683==    by 0x4BABAA3: start_thread (pthread_create.c:447)
+==28683==    by 0x4C38A63: clone (clone.S:100)
+==28683== 
+==28683== 1,024 bytes in 1 blocks are still reachable in loss record 28 of 40
+==28683==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x4B941B4: _IO_file_doallocate (filedoalloc.c:101)
+==28683==    by 0x4BA4523: _IO_doallocbuf (genops.c:347)
+==28683==    by 0x4BA1F8F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:745)
+==28683==    by 0x4BA2AAE: _IO_new_file_xsputn (fileops.c:1244)
+==28683==    by 0x4BA2AAE: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1197)
+==28683==    by 0x4B95A11: fwrite (iofwrite.c:39)
+==28683==    by 0x49B9DC3: std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==28683==    by 0x49BA13B: std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==28683==    by 0x10D292: main (static_proxy_server.cpp:15)
+==28683== 
+==28683== 1,216 bytes in 4 blocks are possibly lost in loss record 29 of 40
+==28683==    at 0x484D953: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x40145AB: calloc (rtld-malloc.h:44)
+==28683==    by 0x40145AB: allocate_dtv (dl-tls.c:370)
+==28683==    by 0x40145AB: _dl_allocate_tls (dl-tls.c:629)
+==28683==    by 0x4BAC616: allocate_stack (allocatestack.c:429)
+==28683==    by 0x4BAC616: pthread_create@@GLIBC_2.34 (pthread_create.c:655)
+==28683==    by 0x494FEB0: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==28683==    by 0x12FE00: std::thread::thread<void (net::EventLoopThread::*)(), net::EventLoopThread*, void>(void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (std_thread.h:164)
+==28683==    by 0x12FAC9: net::EventLoopThread::startLoop() (event_loop_thread.cpp:21)
+==28683==    by 0x12D86C: net::threadPool::start() (thread_pool.cpp:41)
+==28683==    by 0x1218BF: net::Server::start() (server.cpp:26)
+==28683==    by 0x10D70C: main (static_proxy_server.cpp:47)
+==28683== 
+==28683== 1,248 bytes in 4 blocks are still reachable in loss record 30 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x12E10C: std::__detail::_MakeUniq<net::EventLoopThread>::__single_object std::make_unique<net::EventLoopThread>() (unique_ptr.h:1070)
+==28683==    by 0x12D858: net::threadPool::start() (thread_pool.cpp:38)
+==28683==    by 0x1218BF: net::Server::start() (server.cpp:26)
+==28683==    by 0x10D70C: main (static_proxy_server.cpp:47)
+==28683== 
+==28683== 1,280 bytes in 4 blocks are still reachable in loss record 31 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x110CE5: std::__detail::_MakeUniq<net::TimerQueue>::__single_object std::make_unique<net::TimerQueue, net::EventLoop*>(net::EventLoop*&&) (unique_ptr.h:1070)
+==28683==    by 0x10FDE3: net::EventLoop::EventLoop() (event_loop.cpp:15)
+==28683==    by 0x12F97B: net::EventLoopThread::EventLoopThread() (event_loop_thread.cpp:5)
+==28683==    by 0x12E121: std::__detail::_MakeUniq<net::EventLoopThread>::__single_object std::make_unique<net::EventLoopThread>() (unique_ptr.h:1070)
+==28683==    by 0x12D858: net::threadPool::start() (thread_pool.cpp:38)
+==28683==    by 0x1218BF: net::Server::start() (server.cpp:26)
+==28683==    by 0x10D70C: main (static_proxy_server.cpp:47)
+==28683== 
+==28683== 1,280 bytes in 4 blocks are still reachable in loss record 32 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x110CE5: std::__detail::_MakeUniq<net::TimerQueue>::__single_object std::make_unique<net::TimerQueue, net::EventLoop*>(net::EventLoop*&&) (unique_ptr.h:1070)
+==28683==    by 0x10FDE3: net::EventLoop::EventLoop() (event_loop.cpp:15)
+==28683==    by 0x12FC24: net::EventLoopThread::threadFunc() (event_loop_thread.cpp:39)
+==28683==    by 0x1306E3: void std::__invoke_impl<void, void (net::EventLoopThread::*)(), net::EventLoopThread*>(std::__invoke_memfun_deref, void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (invoke.h:74)
+==28683==    by 0x130642: std::__invoke_result<void (net::EventLoopThread::*)(), net::EventLoopThread*>::type std::__invoke<void (net::EventLoopThread::*)(), net::EventLoopThread*>(void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (invoke.h:96)
+==28683==    by 0x1305B2: void std::thread::_Invoker<std::tuple<void (net::EventLoopThread::*)(), net::EventLoopThread*> >::_M_invoke<0ul, 1ul>(std::_Index_tuple<0ul, 1ul>) (std_thread.h:292)
+==28683==    by 0x13056B: std::thread::_Invoker<std::tuple<void (net::EventLoopThread::*)(), net::EventLoopThread*> >::operator()() (std_thread.h:299)
+==28683==    by 0x13054F: std::thread::_State_impl<std::thread::_Invoker<std::tuple<void (net::EventLoopThread::*)(), net::EventLoopThread*> > >::_M_run() (std_thread.h:244)
+==28683==    by 0x494FDB3: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==28683==    by 0x4BABAA3: start_thread (pthread_create.c:447)
+==28683==    by 0x4C38A63: clone (clone.S:100)
+==28683== 
+==28683== 2,048 bytes in 4 blocks are still reachable in loss record 33 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x1137EB: std::__new_allocator<std::function<void ()> >::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x112CF7: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x112CF7: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_allocate_node() (stl_deque.h:583)
+==28683==    by 0x11243A: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_create_nodes(std::function<void ()>**, std::function<void ()>**) (stl_deque.h:684)
+==28683==    by 0x1119E3: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_initialize_map(unsigned long) (stl_deque.h:658)
+==28683==    by 0x110F97: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_Deque_base() (stl_deque.h:460)
+==28683==    by 0x10FCC7: std::deque<std::function<void ()>, std::allocator<std::function<void ()> > >::deque() (stl_deque.h:855)
+==28683==    by 0x10FE46: net::EventLoop::EventLoop() (event_loop.cpp:15)
+==28683==    by 0x12F97B: net::EventLoopThread::EventLoopThread() (event_loop_thread.cpp:5)
+==28683==    by 0x12E121: std::__detail::_MakeUniq<net::EventLoopThread>::__single_object std::make_unique<net::EventLoopThread>() (unique_ptr.h:1070)
+==28683==    by 0x12D858: net::threadPool::start() (thread_pool.cpp:38)
+==28683==    by 0x1218BF: net::Server::start() (server.cpp:26)
+==28683== 
+==28683== 2,048 bytes in 4 blocks are still reachable in loss record 34 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x1137EB: std::__new_allocator<std::function<void ()> >::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x112CF7: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x112CF7: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_allocate_node() (stl_deque.h:583)
+==28683==    by 0x11243A: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_create_nodes(std::function<void ()>**, std::function<void ()>**) (stl_deque.h:684)
+==28683==    by 0x1119E3: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_M_initialize_map(unsigned long) (stl_deque.h:658)
+==28683==    by 0x110F97: std::_Deque_base<std::function<void ()>, std::allocator<std::function<void ()> > >::_Deque_base() (stl_deque.h:460)
+==28683==    by 0x10FCC7: std::deque<std::function<void ()>, std::allocator<std::function<void ()> > >::deque() (stl_deque.h:855)
+==28683==    by 0x1101A3: net::EventLoop::doPendingFunctors() (event_loop.cpp:61)
+==28683==    by 0x1103A8: net::EventLoop::loop() (event_loop.cpp:88)
+==28683==    by 0x12FC8C: net::EventLoopThread::threadFunc() (event_loop_thread.cpp:48)
+==28683==    by 0x1306E3: void std::__invoke_impl<void, void (net::EventLoopThread::*)(), net::EventLoopThread*>(std::__invoke_memfun_deref, void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (invoke.h:74)
+==28683==    by 0x130642: std::__invoke_result<void (net::EventLoopThread::*)(), net::EventLoopThread*>::type std::__invoke<void (net::EventLoopThread::*)(), net::EventLoopThread*>(void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (invoke.h:96)
+==28683== 
+==28683== 12,288 bytes in 1 blocks are still reachable in loss record 35 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x11370E: std::__new_allocator<epoll_event>::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x112C40: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x112C40: std::_Vector_base<epoll_event, std::allocator<epoll_event> >::_M_allocate(unsigned long) (stl_vector.h:381)
+==28683==    by 0x11222A: std::_Vector_base<epoll_event, std::allocator<epoll_event> >::_M_create_storage(unsigned long) (stl_vector.h:398)
+==28683==    by 0x111808: std::_Vector_base<epoll_event, std::allocator<epoll_event> >::_Vector_base(unsigned long, std::allocator<epoll_event> const&) (stl_vector.h:335)
+==28683==    by 0x110EBA: std::vector<epoll_event, std::allocator<epoll_event> >::vector(unsigned long, std::allocator<epoll_event> const&) (stl_vector.h:557)
+==28683==    by 0x10FE19: net::EventLoop::EventLoop() (event_loop.cpp:14)
+==28683==    by 0x10D2B3: main (static_proxy_server.cpp:18)
+==28683== 
+==28683== 49,152 bytes in 4 blocks are still reachable in loss record 36 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x11370E: std::__new_allocator<epoll_event>::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x112C40: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x112C40: std::_Vector_base<epoll_event, std::allocator<epoll_event> >::_M_allocate(unsigned long) (stl_vector.h:381)
+==28683==    by 0x11222A: std::_Vector_base<epoll_event, std::allocator<epoll_event> >::_M_create_storage(unsigned long) (stl_vector.h:398)
+==28683==    by 0x111808: std::_Vector_base<epoll_event, std::allocator<epoll_event> >::_Vector_base(unsigned long, std::allocator<epoll_event> const&) (stl_vector.h:335)
+==28683==    by 0x110EBA: std::vector<epoll_event, std::allocator<epoll_event> >::vector(unsigned long, std::allocator<epoll_event> const&) (stl_vector.h:557)
+==28683==    by 0x10FE19: net::EventLoop::EventLoop() (event_loop.cpp:14)
+==28683==    by 0x12F97B: net::EventLoopThread::EventLoopThread() (event_loop_thread.cpp:5)
+==28683==    by 0x12E121: std::__detail::_MakeUniq<net::EventLoopThread>::__single_object std::make_unique<net::EventLoopThread>() (unique_ptr.h:1070)
+==28683==    by 0x12D858: net::threadPool::start() (thread_pool.cpp:38)
+==28683==    by 0x1218BF: net::Server::start() (server.cpp:26)
+==28683==    by 0x10D70C: main (static_proxy_server.cpp:47)
+==28683== 
+==28683== 49,152 bytes in 4 blocks are still reachable in loss record 37 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x11370E: std::__new_allocator<epoll_event>::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x112C40: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x112C40: std::_Vector_base<epoll_event, std::allocator<epoll_event> >::_M_allocate(unsigned long) (stl_vector.h:381)
+==28683==    by 0x11222A: std::_Vector_base<epoll_event, std::allocator<epoll_event> >::_M_create_storage(unsigned long) (stl_vector.h:398)
+==28683==    by 0x111808: std::_Vector_base<epoll_event, std::allocator<epoll_event> >::_Vector_base(unsigned long, std::allocator<epoll_event> const&) (stl_vector.h:335)
+==28683==    by 0x110EBA: std::vector<epoll_event, std::allocator<epoll_event> >::vector(unsigned long, std::allocator<epoll_event> const&) (stl_vector.h:557)
+==28683==    by 0x10FE19: net::EventLoop::EventLoop() (event_loop.cpp:14)
+==28683==    by 0x12FC24: net::EventLoopThread::threadFunc() (event_loop_thread.cpp:39)
+==28683==    by 0x1306E3: void std::__invoke_impl<void, void (net::EventLoopThread::*)(), net::EventLoopThread*>(std::__invoke_memfun_deref, void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (invoke.h:74)
+==28683==    by 0x130642: std::__invoke_result<void (net::EventLoopThread::*)(), net::EventLoopThread*>::type std::__invoke<void (net::EventLoopThread::*)(), net::EventLoopThread*>(void (net::EventLoopThread::*&&)(), net::EventLoopThread*&&) (invoke.h:96)
+==28683==    by 0x1305B2: void std::thread::_Invoker<std::tuple<void (net::EventLoopThread::*)(), net::EventLoopThread*> >::_M_invoke<0ul, 1ul>(std::_Index_tuple<0ul, 1ul>) (std_thread.h:292)
+==28683==    by 0x13056B: std::thread::_Invoker<std::tuple<void (net::EventLoopThread::*)(), net::EventLoopThread*> >::operator()() (std_thread.h:299)
+==28683== 
+==28683== 73,728 bytes in 1 blocks are still reachable in loss record 38 of 40
+==28683==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x491A38E: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==28683==    by 0x400571E: call_init.part.0 (dl-init.c:74)
+==28683==    by 0x4005823: call_init (dl-init.c:120)
+==28683==    by 0x4005823: _dl_init (dl-init.c:121)
+==28683==    by 0x401F59F: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+==28683== 
+==28683== 255,488 bytes in 3,992 blocks are indirectly lost in loss record 39 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x11E4AB: void std::_Function_base::_Base_manager<app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}>::_M_create<app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}>(std::_Any_data&, app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}&&, std::integral_constant<bool, false>) (std_function.h:161)
+==28683==    by 0x11DFD2: void std::_Function_base::_Base_manager<app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}>::_M_init_functor<app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}>(std::_Any_data&, app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}&&) (std_function.h:215)
+==28683==    by 0x11DCD8: std::function<void ()>::function<app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}, void>(app::HealthChecker::probe(net::InetAddress const&)::{lambda()#2}&&) (std_function.h:449)
+==28683==    by 0x11D95C: app::HealthChecker::probe(net::InetAddress const&) (health_checker.cpp:53)
+==28683==    by 0x11D3FE: app::HealthChecker::checkBackends() (health_checker.cpp:22)
+==28683==    by 0x11D2B2: app::HealthChecker::start(double)::{lambda()#1}::operator()() const (health_checker.cpp:15)
+==28683==    by 0x11E631: void std::__invoke_impl<void, app::HealthChecker::start(double)::{lambda()#1}&>(std::__invoke_other, app::HealthChecker::start(double)::{lambda()#1}&) (invoke.h:61)
+==28683==    by 0x11E10B: std::enable_if<is_invocable_r_v<void, app::HealthChecker::start(double)::{lambda()#1}&>, void>::type std::__invoke_r<void, app::HealthChecker::start(double)::{lambda()#1}&>(app::HealthChecker::start(double)::{lambda()#1}&) (invoke.h:111)
+==28683==    by 0x11DD8F: std::_Function_handler<void (), app::HealthChecker::start(double)::{lambda()#1}>::_M_invoke(std::_Any_data const&) (std_function.h:290)
+==28683==    by 0x111247: std::function<void ()>::operator()() const (std_function.h:591)
+==28683==    by 0x127107: net::Timer::run() const (timer.h:21)
+==28683== 
+==28683== 926,144 (670,656 direct, 255,488 indirect) bytes in 3,992 blocks are definitely lost in loss record 40 of 40
+==28683==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==28683==    by 0x11EF00: std::__new_allocator<std::_Sp_counted_ptr_inplace<net::Channel, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> >::allocate(unsigned long, void const*) (new_allocator.h:151)
+==28683==    by 0x11EA67: UnknownInlinedFun (alloc_traits.h:482)
+==28683==    by 0x11EA67: std::__allocated_ptr<std::allocator<std::_Sp_counted_ptr_inplace<net::Channel, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > std::__allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<net::Channel, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > >(std::allocator<std::_Sp_counted_ptr_inplace<net::Channel, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> >&) (allocated_ptr.h:98)
+==28683==    by 0x11E6E4: std::__shared_count<(__gnu_cxx::_Lock_policy)2>::__shared_count<net::Channel, std::allocator<void>, net::EventLoop*&, int&>(net::Channel*&, std::_Sp_alloc_shared_tag<std::allocator<void> >, net::EventLoop*&, int&) (shared_ptr_base.h:969)
+==28683==    by 0x11E231: std::__shared_ptr<net::Channel, (__gnu_cxx::_Lock_policy)2>::__shared_ptr<std::allocator<void>, net::EventLoop*&, int&>(std::_Sp_alloc_shared_tag<std::allocator<void> >, net::EventLoop*&, int&) (shared_ptr_base.h:1712)
+==28683==    by 0x11DE6E: std::shared_ptr<net::Channel>::shared_ptr<std::allocator<void>, net::EventLoop*&, int&>(std::_Sp_alloc_shared_tag<std::allocator<void> >, net::EventLoop*&, int&) (shared_ptr.h:464)
+==28683==    by 0x11DB8C: std::shared_ptr<std::enable_if<!std::is_array<net::Channel>::value, net::Channel>::type> std::make_shared<net::Channel, net::EventLoop*&, int&>(net::EventLoop*&, int&) (shared_ptr.h:1010)
+==28683==    by 0x11D82F: app::HealthChecker::probe(net::InetAddress const&) (health_checker.cpp:40)
+==28683==    by 0x11D3FE: app::HealthChecker::checkBackends() (health_checker.cpp:22)
+==28683==    by 0x11D2B2: app::HealthChecker::start(double)::{lambda()#1}::operator()() const (health_checker.cpp:15)
+==28683==    by 0x11E631: void std::__invoke_impl<void, app::HealthChecker::start(double)::{lambda()#1}&>(std::__invoke_other, app::HealthChecker::start(double)::{lambda()#1}&) (invoke.h:61)
+==28683==    by 0x11E10B: std::enable_if<is_invocable_r_v<void, app::HealthChecker::start(double)::{lambda()#1}&>, void>::type std::__invoke_r<void, app::HealthChecker::start(double)::{lambda()#1}&>(app::HealthChecker::start(double)::{lambda()#1}&) (invoke.h:111)
+==28683== 
+==28683== LEAK SUMMARY:
+==28683==    definitely lost: 670,656 bytes in 3,992 blocks
+==28683==    indirectly lost: 255,488 bytes in 3,992 blocks
+==28683==      possibly lost: 1,448 bytes in 6 blocks
+==28683==    still reachable: 197,232 bytes in 77 blocks
+==28683==         suppressed: 0 bytes in 0 blocks
+==28683== 
+==28683== For lists of detected and suppressed errors, rerun with: -s
+==28683== ERROR SUMMARY: 4 errors from 4 contexts (suppressed: 0 from 0)

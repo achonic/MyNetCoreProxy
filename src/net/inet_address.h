@@ -17,6 +17,14 @@ public:
     std::string toIpPort() const;
     uint16_t toPort() const;
 
+    bool operator==(const InetAddress& other) const {
+        return toIpPort() == other.toIpPort();
+    }
+
+    bool operator<(const InetAddress& other) const {
+        return toIpPort() < other.toIpPort();
+    }
+
     const struct sockaddr_in* getSockAddrInet() const { return &addr_; }
     void setSockAddrInet(const struct sockaddr_in& addr) { addr_ = addr; }
 

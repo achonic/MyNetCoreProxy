@@ -2,6 +2,7 @@
 #include "net/server.h"
 #include "net/event_loop.h"
 #include "net/inet_address.h"
+#include <cstdlib>
 #include <iostream>
 
 int main() {
@@ -42,6 +43,15 @@ int main() {
     // 7. 启动事件循环
     LOG_DEBUG << "Server is running. Waiting for connections..." << std::endl;
     LOG_DEBUG << "Press Ctrl+C to stop." << std::endl;
+
+    if (const char* exit_after = std::getenv("ECHO_SERVER_EXIT_AFTER_MS")) {
+        int delay_ms = std::atoi(exit_after);
+        if (delay_ms > 0) {
+            main_loop.runAfter(delay_ms / 1000.0, [&main_loop]() {
+                main_loop.quit();
+            });
+        }
+    }
 
     main_loop.loop();
 

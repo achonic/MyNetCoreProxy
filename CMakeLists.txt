@@ -6,6 +6,18 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF) # 禁用编译器特有扩展，保证代码的高可移植性
 
+# ==========================================
+# 0. 内存安全检测开关 (AddressSanitizer)
+# ==========================================
+option(ENABLE_ASAN "Enable AddressSanitizer for memory leak and error detection" OFF)
+
+if(ENABLE_ASAN)
+    message(STATUS "Memory Sanitizer: ASan is ENABLED")
+    # 为所有目标添加编译和链接选项
+    add_compile_options(-fsanitize=address -fno-omit-frame-pointer -g)
+    add_link_options(-fsanitize=address)
+endif()
+
 # 忽略未使用的头文件包含警告
 add_compile_options(-Wno-unused-include)
 
@@ -15,8 +27,8 @@ add_compile_options(-Wno-unused-include)
 # ==========================================
 # 如果用户在命令行没有指定编译类型，强制默认使用 Release 模式
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    message(STATUS "No build type selected, default to Release")
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
+    message(STATUS "No build type selected, default to Debug")
+    set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build." FORCE)
     # 给 GUI 工具提供下拉菜单选项
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
@@ -43,9 +55,15 @@ target_sources(MyNetCoreLib PRIVATE
     src/net/acceptor.cpp
     src/net/tcp_connection.cpp
     src/app/http_proxy_handler.cpp
+    src/app/load_balancer.cpp
+    src/app/load_balancer_handler.cpp
+    src/app/health_checker.cpp
     src/net/buffer.cpp
     src/net/inet_address.cpp
     src/net/server.cpp
+    src/net/timestamp.cpp
+    src/net/timer.cpp
+    src/net/timer_queue.cpp
 )
 
 target_include_directories(MyNetCoreLib PUBLIC

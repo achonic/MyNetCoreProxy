@@ -74,7 +74,9 @@ private:
         kConnecting,
         kDisConnecting
     };
-    const InetAddress& peer_addr_;
+    // [FIX] 改为值存储。原代码: const InetAddress& peer_addr_; 
+    // 原因: 避免引用构造函数中的临时变量导致悬空引用(Dangling Reference)
+    const InetAddress peer_addr_;
 
     EventLoop* loop_;
     const std::string name_;

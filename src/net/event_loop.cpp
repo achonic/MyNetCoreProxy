@@ -1,5 +1,6 @@
 #include "net/event_loop.h"
 #include "net/channel.h"
+#include "net/timer_queue.h"
 #include <cassert>
 #include <cerrno>
 #include <cstring>
@@ -11,7 +12,8 @@ namespace net {
 EventLoop::EventLoop()
     : epoll_fd_(::epoll_create1(EPOLL_CLOEXEC)), looping_(false), quit_(false),
       thread_id_(std::this_thread::get_id()), events_(kEpollFdSize),
-      wakeup_fd_(-1), wakeupChannel_(nullptr) {
+      wakeup_fd_(-1), wakeupChannel_(nullptr),
+      timerQueue_(std::make_unique<TimerQueue>(this)) {
   if (epoll_fd_ < 0) {
     perror("epoll_create1");
     abort();
@@ -41,21 +43,19 @@ EventLoop::~EventLoop() {
 }
 
 void EventLoop::runInLoop(std::function<void()> cb) {
-  if (isInLoopThread()) { // <--- 再次检查：当前线程（Caller Thread）是否是
-                          // EventLoop 线程？
-    cb();  // 如果是，直接执行
-  } else { // <--- 条件成立：Caller Thread 不是 EventLoop 线程！
-    // 回调加入任务队列 加锁
+  // 在当前线程，且任务队列没有在执行，那直接执行当前任务。
+  if (isInLoopThread() && !calling_pending_functors_) {
+    cb();
+  } else {
+    // 否则就把任务投递到队列里，并插入唤醒标志
     {
-      std::lock_guard<std::mutex> lock(mutex_);   // <--- Caller Thread 加锁
-      pending_functors_.push_back(std::move(cb)); // <--- 将任务放入队列
+      std::lock_guard<std::mutex> lock(mutex_);
+      pending_functors_.push_back(std::move(cb));
     }
-    if (!calling_pending_functors_) { // <--- 检查 EventLoop
-                                      // 是否正在处理任务队列
-      wakeup(); // <--- 如果 EventLoop 没在处理任务队列，唤醒它！
-    }
+    wakeup();
   }
 }
+
 void EventLoop::doPendingFunctors() {
   std::deque<std::function<void()>> functors;
   // 正在处理任务队列，让新投递任务不要唤醒eventloop
@@ -181,4 +181,47 @@ void EventLoop::removeChannel(Channel *channel) {
     channel->setIndex(-1);
   }
 }
+/*
+  每个定时任务都绑定一个 Timerid ，能够通过 Timerid 取消定时任务
+  三个函数完成了：
+    1、指定某一时刻执行定时任务。
+    2、指定当前时间的几秒后执行定时任务。
+    3、指定当前时间的interval后，周期性间隔interval执行定时任务。
+*/
+
+/*
+    一次性定时任务
+    时间是直接传进来的绝对时间
+
+    runAt(Timestamp time, std::function<void()> cb)
+    表示在当前时间戳执行定时任务cb。
+*/
+TimerId EventLoop::runAt(Timestamp time, std::function<void()> cb) {
+  return timerQueue_->addTimer(std::move(cb), time, 0.0);
+}
+
+/*
+  runAfter：相对延迟的一次性任务
+  addTime(Timestamp::now(), delay)
+  delay = 3 会返回当前时间3秒后的时间戳。然后塞入cb，表示定时3秒后执行这个cb。
+*/
+
+TimerId EventLoop::runAfter(double delay, std::function<void()> cb) {
+  Timestamp time(addTime(Timestamp::now(), delay));
+  return runAt(time, std::move(cb));
+}
+
+/*
+  runEvery：相对延迟启动的周期任务
+  周期任务在 timerQueue_->addTimer 的第三项设置 interval
+  表示周期执行的时间间隔。
+*/
+TimerId EventLoop::runEvery(double interval, std::function<void()> cb) {
+  Timestamp time(addTime(Timestamp::now(), interval));
+  return timerQueue_->addTimer(std::move(cb), time, interval);
+}
+
+// cancel：按 TimerId 取消任务
+void EventLoop::cancel(TimerId timerId) { return timerQueue_->cancel(timerId); }
+
 } // namespace net

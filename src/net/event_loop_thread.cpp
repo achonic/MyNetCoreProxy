@@ -9,7 +9,12 @@ EventLoopThread::EventLoopThread() : loop_ptr_(nullptr), exiting_(false) {}
 EventLoopThread::~EventLoopThread() {
   if (thread_.joinable()) {
     exiting_ = true;
-    loop_.quit();
+    
+    // [FIX] 通过 loop_ptr_ 停止工作线程。原代码: loop_.quit();
+    // 原因: 原代码停止的是类成员 loop_，但工作线程跑的是 threadFunc 栈上的局部 loop。
+    if (loop_ptr_ != nullptr) {
+      loop_ptr_->quit();
+    }
     thread_.join();
   }
 }
@@ -28,7 +33,11 @@ EventLoop *EventLoopThread::startLoop() {
 
   return loop_ptr_;
 }
-void EventLoopThread::stop() { loop_.quit(); }
+void EventLoopThread::stop() {
+  if (loop_ptr_ != nullptr) {
+    loop_ptr_->quit();
+  }
+}
 void EventLoopThread::join() {
   if (thread_.joinable()) {
     thread_.join();

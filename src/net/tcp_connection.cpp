@@ -95,17 +95,39 @@ void TcpConnection::connectEstablishedAsClient() {
             << ", waiting for connect to complete." << std::endl;
 }
 
+// 这里两个重点问题： 客户端关闭了，怎么通知后端关闭，反之又是怎么处理。
+// 客户端关闭会通过 handler 去调用 handler_->onClose(this); 关闭掉后端的连接
+// 后端设置了回调，存在后端 TcpConnection 的 close_callback_ 里
+// 里面存了客户端调用 shutdown() 的动作，关闭掉客户端的连接，实现了闭环。
 void TcpConnection::connectDestroyed() {
   assert(loop_->isInLoopThread());
-  if (state_ == kConnected) {
+
+  // [FIX] 核心修复：增加 kDisConnecting 状态判断。
+  // 原逻辑: if (state_ == kConnected) { ... }
+  // 原因:
+  // 1. 被动关闭：原 handleClose 直接把状态设为
+  // kDisConnected，导致此处的清理逻辑被跳过。
+  // 2. 主动关闭：调用 shutdown() 后状态为 kDisConnecting，原逻辑也会跳过此处。
+  // 结果: 以上两种情况都会导致 close_callback_ 没执行，Server 无法从 Map
+  // 中删除连接，造成内存泄漏。 现逻辑：1、被动关闭 handleClose 直接跳到
+  // connectDestroyed() state_状态还是Connected 2、 主动关闭 shutdown() 后状态为
+  // kDisConnecting
+  // 在第一次销毁连接的时候，把event置0，让他fd不再被epoll监听事件
+  // 并且
+  if (state_ == kConnected || state_ == kDisConnecting) {
     state_ = kDisConnected;
     channel_->disableAll();
 
     if (handler_)
       handler_->onClose(this);
+  }
 
-    if (close_callback_)
-      close_callback_(this);
+  // [FIX] 调整顺序：先从 Epoll 移除 Channel，再回调销毁 TcpConnection。
+  // 防止在回调过程中由于引用计数归零导致对象销毁后，仍在处理残留事件。
+  channel_->remove();
+
+  if (close_callback_) {
+    close_callback_(this);
   }
 }
 
@@ -168,7 +190,7 @@ void TcpConnection::sendInLoop(const std::string &message) {
         LOG_DEBUG << "[" << name_ << "] sendInLoop: High water mark ("
                   << high_water_mark_ << ") reached. Triggering callback."
                   << std::endl;
-        loop_->runInLoop(std::bind(high_water_mark_callback_, this));
+        loop_->runInLoop([this]() { high_water_mark_callback_(this); });
       }
 
       if (!channel_->isWriting()) {
@@ -298,7 +320,7 @@ void TcpConnection::handleWrite() {
                       << "] Disabled writing on channel as buffer is empty."
                       << std::endl;
             if (write_complete_callback_) {
-              loop_->runInLoop(std::bind(write_complete_callback_, this));
+              loop_->runInLoop([this]() { write_complete_callback_(this); });
             }
             break;
           }
@@ -323,7 +345,13 @@ void TcpConnection::handleWrite() {
 
 void TcpConnection::handleClose() {
   assert(loop_->isInLoopThread());
-  state_ = kDisConnected;
+  LOG_DEBUG << "[" << name_ << "] handleClose called. State: " << state_
+            << std::endl;
+
+  // [FIX] 不再在这里直接设置 state_ = kDisConnected;
+  // 原代码: state_ = kDisConnected; connectDestroyed();
+  // 原因: 如果在这里设为 kDisConnected，会导致 connectDestroyed
+  // 里的清理逻辑因为状态判断失效。
   connectDestroyed();
 }
 
